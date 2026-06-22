@@ -1,6 +1,6 @@
 # NoBorder
 
-Removes the white DWM border that appears around windows on Windows 11
+Removes the white border that appears around windows on Windows 11
 (most noticeable when snapping windows side by side), using the documented
 `DWMWA_BORDER_COLOR` window attribute. Has grown from a one-shot fix into
 a small tray-resident app with a Settings page for color mode, app
@@ -18,8 +18,7 @@ exclusions, a global hotkey, theme, and notifications.
 dotnet build -c Release
 ```
 
-Output: `bin\Release\net8.0-windows\NoBorder.exe`. Copy that single .exe
-anywhere you like.
+Output: `bin\Release\net8.0-windows\NoBorder.exe`.
 
 ## Using the app
 
