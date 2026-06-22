@@ -1,0 +1,150 @@
+<UserControl x:Class="NoBorder.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignWidth="280">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Focusable="False">
+        <StackPanel>
+
+            <!-- Border treatment -->
+            <TextBlock Text="BORDER" Style="{StaticResource SectionHeader}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <RadioButton x:Name="NoBorderRadio" Content="No border" Style="{StaticResource RadioRow}"
+                                 GroupName="BorderMode" Checked="BorderModeRadio_Changed"/>
+                    <RadioButton x:Name="CustomColorRadio" Content="Custom color" Style="{StaticResource RadioRow}"
+                                 GroupName="BorderMode" Margin="0,10,0,0" Checked="BorderModeRadio_Changed"/>
+
+                    <Grid x:Name="ColorPickerRow" Margin="24,10,0,0" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ItemsControl x:Name="SwatchList" Grid.Column="0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <Border x:Name="CurrentColorSwatch" Grid.Column="1" Width="26" Height="26" CornerRadius="13"
+                                BorderBrush="{DynamicResource StrokeBrush}" BorderThickness="1.5"
+                                Cursor="Hand" MouseLeftButtonUp="CustomSwatch_Clicked"
+                                ToolTip="Pick a custom color"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Exclusions -->
+            <TextBlock Text="EXCLUDED APPS" Style="{StaticResource SectionHeader}" Margin="0,10,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock Text="Borders stay normal on these. Matches by process name or window title."
+                               Style="{StaticResource LabelMuted}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                    <ItemsControl x:Name="ExclusionsList"/>
+
+                    <TextBlock x:Name="NoExclusionsText" Text="No apps excluded yet"
+                               Style="{StaticResource LabelMuted}" Margin="0,2,0,0"
+                               Visibility="Visible"/>
+
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ExclusionInput" Style="{StaticResource DarkTextBox}"
+                                 KeyDown="ExclusionInput_KeyDown"
+                                 ToolTip="Type a process name or window title, then press Enter"/>
+                        <Button Grid.Column="1" Content="Add" Style="{StaticResource SmallButton}"
+                                Margin="8,0,0,0" Click="AddExclusionButton_Click"/>
+                    </Grid>
+                    <Button Content="Pick from open windows..." Style="{StaticResource QuietButton}"
+                            HorizontalAlignment="Stretch" Margin="0,6,0,0"
+                            Click="PickFromOpenWindowsButton_Click"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Hotkey -->
+            <TextBlock Text="GLOBAL HOTKEY" Style="{StaticResource SectionHeader}" Margin="0,10,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Toggle watching with a key combo" Style="{StaticResource BodyText}"
+                                   VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        <ToggleButton x:Name="HotkeyEnabledToggle" Grid.Column="1" Style="{StaticResource ToggleButtonPill}"
+                                      VerticalAlignment="Center" Checked="HotkeyEnabledToggle_Changed"
+                                      Unchecked="HotkeyEnabledToggle_Changed"/>
+                    </Grid>
+
+                    <Button x:Name="HotkeyCaptureButton" Content="Ctrl + Alt + B" Style="{StaticResource SmallButton}"
+                            HorizontalAlignment="Stretch" Margin="0,10,0,0"
+                            Click="HotkeyCaptureButton_Click" PreviewKeyDown="HotkeyCaptureButton_PreviewKeyDown"/>
+                    <TextBlock x:Name="HotkeyHintText" Text="" Style="{StaticResource LabelMuted}"
+                               Margin="0,6,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Startup behavior -->
+            <TextBlock Text="STARTUP" Style="{StaticResource SectionHeader}" Margin="0,10,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Show window on startup (instead of tray only)" Style="{StaticResource BodyText}"
+                               VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <ToggleButton x:Name="ShowWindowOnStartupToggle" Grid.Column="1" Style="{StaticResource ToggleButtonPill}"
+                                  VerticalAlignment="Center" Checked="ShowWindowOnStartupToggle_Changed"
+                                  Unchecked="ShowWindowOnStartupToggle_Changed"/>
+                </Grid>
+            </Border>
+
+            <!-- Appearance -->
+            <TextBlock Text="APPEARANCE" Style="{StaticResource SectionHeader}" Margin="0,10,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <RadioButton x:Name="ThemeSystemRadio" Content="Match Windows" Style="{StaticResource RadioRow}"
+                                 GroupName="Theme" Checked="ThemeRadio_Changed"/>
+                    <RadioButton x:Name="ThemeDarkRadio" Content="Dark" Style="{StaticResource RadioRow}"
+                                 GroupName="Theme" Margin="0,10,0,0" Checked="ThemeRadio_Changed"/>
+                    <RadioButton x:Name="ThemeLightRadio" Content="Light" Style="{StaticResource RadioRow}"
+                                 GroupName="Theme" Margin="0,10,0,0" Checked="ThemeRadio_Changed"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Notifications -->
+            <TextBlock Text="NOTIFICATIONS" Style="{StaticResource SectionHeader}" Margin="0,10,0,8"/>
+            <Border Background="{DynamicResource BgRaisedBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Notify when watching starts or stops" Style="{StaticResource BodyText}"
+                               VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <ToggleButton x:Name="ToastToggle" Grid.Column="1" Style="{StaticResource ToggleButtonPill}"
+                                  VerticalAlignment="Center" Checked="ToastToggle_Changed"
+                                  Unchecked="ToastToggle_Changed"/>
+                </Grid>
+            </Border>
+
+            <!-- Compatibility warning, shown only if relevant -->
+            <Border x:Name="CompatWarningBox" Background="{DynamicResource BgRaisedBrush}" CornerRadius="10"
+                    Padding="14,12" Margin="0,2,0,8" Visibility="Collapsed"
+                    BorderBrush="{DynamicResource DangerBrush}" BorderThickness="1">
+                <TextBlock Text="Your Windows version is older than what this feature needs (Windows 11 22H2 or later). The border fix may not have any visible effect."
+                           Style="{StaticResource LabelMuted}" TextWrapping="Wrap" Foreground="{DynamicResource DangerBrush}"/>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

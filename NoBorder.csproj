@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>NoBorder</AssemblyName>
+    <RootNamespace>NoBorder</RootNamespace>
+    <Platforms>x64</Platforms>
+    <SelfContained>false</SelfContained>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <!-- We define our own Main (in App.xaml.cs) to handle CLI args like "once" and "stop"
+         before deciding whether to show the UI. WPF normally auto-generates its own Main
+         from App.xaml's markup, which collides with ours, so turn that off explicitly. -->
+    <StartupObject>NoBorder.App</StartupObject>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Same .ico used for: the exe's Win32 icon (taskbar/Task Manager/Explorer, via
+         ApplicationIcon above), the window's titlebar/taskbar icon (MainWindow.xaml's
+         Icon=), and the tray icon (loaded at runtime in App.xaml.cs). One file, one look
+         everywhere, instead of the old approach of generating the tray icon separately. -->
+    <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- UseWindowsForms implicitly adds global usings for System.Drawing AND
+         System.Windows.Forms project-wide (not just where it's actually needed), which
+         repeatedly collided with same-named WPF types (Button, Application, Color,
+         ColorConverter, Brush, FontFamily, HorizontalAlignment, KeyEventArgs, Cursors, ...).
+         Removing both here means the handful of places that genuinely need a WinForms/GDI+
+         type (the tray icon in App.xaml.cs, the color picker in SettingsView.xaml.cs) must
+         fully-qualify it, which is a small, explicit cost in exchange for eliminating this
+         entire bug class everywhere else in the project. -->
+    <Using Remove="System.Drawing" />
+    <Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>
