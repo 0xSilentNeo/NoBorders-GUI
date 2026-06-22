@@ -13,7 +13,12 @@
     <RootNamespace>NoBorder</RootNamespace>
     <Platforms>x64</Platforms>
     <SelfContained>false</SelfContained>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- InvariantGlobalization trims culture data for a smaller/faster build, but WPF's
+         text input stack (anything that touches a focused TextBox's caret) unconditionally
+         needs real CultureInfo data and throws CultureNotFoundException the moment a TextBox
+         gets keyboard focus when this is true. Since this app has several TextBoxes
+         (exclusions, hex/RGB color inputs, hotkey capture), it can't use invariant mode. -->
+    <InvariantGlobalization>false</InvariantGlobalization>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <!-- We define our own Main (in App.xaml.cs) to handle CLI args like "once" and "stop"
          before deciding whether to show the UI. WPF normally auto-generates its own Main

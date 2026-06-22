@@ -1,6 +1,6 @@
 # NoBorder
 
-Removes the white border that appears around windows on Windows 11
+Removes the white DWM border that appears around windows on Windows 11
 (most noticeable when snapping windows side by side), using the documented
 `DWMWA_BORDER_COLOR` window attribute. Has grown from a one-shot fix into
 a small tray-resident app with a Settings page for color mode, app
@@ -18,7 +18,8 @@ exclusions, a global hotkey, theme, and notifications.
 dotnet build -c Release
 ```
 
-Output: `bin\Release\net8.0-windows\NoBorder.exe`.
+Output: `bin\Release\net8.0-windows\NoBorder.exe`. Copy that single .exe
+anywhere you like.
 
 ## Using the app
 
@@ -35,7 +36,9 @@ It has two tabs:
 
 ### Settings
 - **Border** — choose **No border** (the original behavior) or **Custom
-  color**, with six preset swatches plus a full color picker.
+  color**, with six preset swatches plus a full custom color picker (a
+  saturation/lightness square, hue slider, hex, and RGB inputs, styled to
+  match the rest of the app rather than the old Windows color dialog).
 - **Excluded apps** — type a process name or window title to skip it
   entirely, or click **Pick from open windows...** to choose from what's
   currently running. Matching is case-insensitive "contains" against
@@ -97,6 +100,14 @@ window icon, and tray icon, generated as a multi-resolution `.ico` under
   second launch from starting its own tray icon; named `EventWaitHandle`s
   (`StopSignal.cs`) let any process ask a running instance to stop or
   come to the foreground.
+- **Settings page scrolling**: a custom `ScrollBar`/`ScrollViewer` style
+  (`App.xaml`) replaces the default Win32-chrome scrollbar with a thin
+  floating thumb, matching the rest of the app instead of standing out as
+  OS-default chrome.
+- **Color picker**: `ColorPickerDialog.xaml`/`.cs` is a small custom WPF
+  dialog (HSV math, draggable saturation/lightness square, hue slider,
+  hex/RGB inputs) replacing the old `System.Windows.Forms.ColorDialog`,
+  so the picker looks like part of NoBorder instead of a Windows 7 relic.
 - Settings persist as plain JSON at `%AppData%\NoBorder\settings.json`
   (`AppSettings.cs`) — no registry usage except the startup `Run` key.
 

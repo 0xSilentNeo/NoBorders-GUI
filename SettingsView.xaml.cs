@@ -122,28 +122,21 @@ namespace NoBorder
 
         private void CustomSwatch_Clicked(object sender, MouseButtonEventArgs e)
         {
-            var dialog = new System.Windows.Forms.ColorDialog
-            {
-                Color = HexToGdiColor(_settings.AccentColorHex),
-                FullOpen = true
-            };
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string hex = $"#FF{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
-                SetAccentColor(hex);
-            }
-        }
-
-        private static System.Drawing.Color HexToGdiColor(string hex)
-        {
+            Color current;
             try
             {
-                var c = (Color)ColorConverter.ConvertFromString(hex)!;
-                return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+                current = (Color)ColorConverter.ConvertFromString(_settings.AccentColorHex)!;
             }
             catch
             {
-                return System.Drawing.Color.FromArgb(255, 0x7F, 0xE7, 0xE0);
+                current = (Color)ColorConverter.ConvertFromString("#FF7FE7E0")!;
+            }
+
+            var dialog = new ColorPickerDialog(current) { Owner = Window.GetWindow(this) };
+            if (dialog.ShowDialog() == true && dialog.SelectedColor is Color picked)
+            {
+                string hex = $"#FF{picked.R:X2}{picked.G:X2}{picked.B:X2}";
+                SetAccentColor(hex);
             }
         }
 

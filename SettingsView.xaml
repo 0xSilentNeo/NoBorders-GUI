@@ -6,6 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="280">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource ModernScrollViewer}"
                   Focusable="False">
         <StackPanel>
 
